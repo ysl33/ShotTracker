@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en-NZ">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f5f5ed">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="description" content="Record golf shots with your phone's location and save an 18-hole scorecard.">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" href="./icon.png">
+<link rel="icon" href="./icon.png">
+<link rel="stylesheet" href="./styles.css">
+<title>Fairway Log</title>
+</head>
+<body>
+<header class="top"><div class="top-inner">
+  <a class="brand" href="./"><img src="./icon.png" width="40" height="40" alt=""><span>Fairway<span class="brand-light"> Log</span></span></a>
+  <nav aria-label="Main"><button type="button" data-tab="play" aria-current="page">Round</button><button type="button" data-tab="history">History</button><button type="button" id="settings">Settings</button></nav>
+</div></header>
+<main>
+<section id="play">
+  <div class="heading">
+    <div><p class="eyebrow" id="date"></p><h1 id="course"></h1><p id="summary" class="muted"></p></div>
+    <button class="solid" id="newRound" type="button">＋ New round</button>
+  </div>
+  <div class="workspace">
+    <section class="panel map-panel" aria-labelledby="mapTitle">
+      <div class="panel-head"><div><h2 id="mapTitle">Shot map</h2><p class="muted" id="mapSubtitle"></p></div><span class="pill" id="gps"></span></div>
+      <div class="map-wrap">
+        <div id="map" hidden aria-label="Google satellite map"></div>
+        <canvas id="plot" role="img" aria-label="Plot of the hole's recorded shot locations"></canvas>
+        <span class="map-label" id="mapType">Shot plot</span>
+        <button type="button" class="map-control" id="fit" aria-label="Fit map to shots" title="Fit map to shots">⌾</button>
+      </div>
+      <div class="map-footer"><span id="mapStatus" class="muted"></span><a id="openMap" hidden target="_blank" rel="noopener noreferrer">Open in Google Maps ↗</a></div>
+    </section>
+    <section class="panel hole-panel" aria-labelledby="holeTitle">
+      <div class="hole-heading"><div><p class="eyebrow" id="holeMeta"></p><h2 id="holeTitle"></h2></div><div class="arrows"><button type="button" id="prev" aria-label="Previous hole">‹</button><button type="button" id="next" aria-label="Next hole">›</button></div></div>
+      <div class="score"><div><h3>Strokes</h3><p class="muted">Include penalties and putts</p></div><div class="stepper"><button type="button" id="minus" aria-label="Decrease strokes">−</button><input id="score" inputmode="numeric" maxlength="2" aria-label="Strokes on this hole" placeholder="–"><button type="button" id="plus" aria-label="Increase strokes">+</button></div></div>
+      <div class="shots-heading"><h3>Shot locations <span id="shotCount"></span></h3><button type="button" id="undo" class="text">Undo last</button></div>
+      <ol id="shots"></ol>
+      <div class="capture">
+        <p id="feedback" class="feedback" role="status" aria-live="polite"></p>
+        <button type="button" class="capture-button" id="mark"><span aria-hidden="true">⌖</span> <span id="markLabel">Mark shot</span></button>
+        <button type="button" class="text" id="endPosition">Mark ball finish</button>
+      </div>
+    </section>
+  </div>
+  <section class="panel scorecard" aria-labelledby="scorecardTitle"><div class="panel-head"><div><h2 id="scorecardTitle">Scorecard</h2><p class="muted" id="scoreSummary"></p></div><button type="button" class="outline" id="finish">Finish round</button></div><div id="holes"></div></section>
+</section>
+<section id="history" hidden>
+  <div class="heading"><div><p class="eyebrow">Your golf</p><h1>Round history</h1><p class="muted">Open a round to review its scorecard and shot locations.</p></div></div>
+  <div id="rounds" class="history-list"></div>
+</section>
+</main>
+<dialog id="roundDialog">
+  <form id="roundForm"><div class="dialog-head"><h2>Start a round</h2><button class="close" type="button" data-close="roundDialog" aria-label="Close">×</button></div>
+    <label for="courseInput">Course or layout</label><input id="courseInput" required maxlength="90" placeholder="e.g. North Shore Golf Club – Red" autocomplete="off">
+    <label for="roundDate">Date</label><input type="date" id="roundDate" required>
+    <p class="muted">Allow location access when prompted. Open a round from History to pick up where you left off.</p>
+    <button type="submit" class="solid">Start 18-hole round</button>
+  </form>
+</dialog>
+<dialog id="settingsDialog">
+  <form id="settingsForm"><div class="dialog-head"><h2>Settings</h2><button class="close" type="button" data-close="settingsDialog" aria-label="Close">×</button></div>
+    <label for="key">Google Maps browser API key</label><input id="key" type="password" placeholder="Paste your API key" autocomplete="off" spellcheck="false">
+    <p class="muted">Enable Maps JavaScript API in your Google Cloud project. For a production key, restrict it to this website and Maps JavaScript API. The key is saved in this browser.</p>
+    <p><a href="https://developers.google.com/maps/documentation/javascript/get-api-key" target="_blank" rel="noopener noreferrer">Google Maps key setup ↗</a></p>
+    <p class="muted">Round history is stored on this device. Export a copy if you want to keep it outside this browser.</p>
+    <button type="button" class="outline" id="export">Export rounds as CSV</button>
+    <button type="submit" class="solid">Save settings</button>
+  </form>
+</dialog>
+<script type="module" src="./app.js"></script>
+</body>
+</html>
